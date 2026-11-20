@@ -1,0 +1,10 @@
+# Generado o temporal
+.dart_tool/
+.packages
+build/
+coverage/
+metrics/
+.idea/
+*.iml
+__MACOSX/
+.DS_Store

@@ -1,0 +1,42 @@
+# Configuración compartida de análisis estático (Tabla 5 - Umbrales de referencia)
+# Identico en la Condicion A (Clean Architecture) y en la Condicion B (MVVM).
+
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    missing_required_param: error
+    missing_return: error
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.mocks.dart"
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
+
+linter:
+  rules:
+    - always_declare_return_types
+    - avoid_print
+    - prefer_const_constructors
+    - prefer_final_locals
+    - prefer_single_quotes
+    - require_trailing_commas
+
+# Configuración de métricas para dart_code_metrics (DCM)
+dart_code_metrics:
+  metrics:
+    cyclomatic-complexity: 20
+    source-lines-of-code: 50
+    maximum-nesting-level: 5
+  metrics-exclude:
+    - test/**
+  rules:
+    - avoid-unused-parameters
+    - no-boolean-literal-compare
+    - prefer-trailing-comma
