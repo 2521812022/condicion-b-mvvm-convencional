@@ -4,7 +4,7 @@ import '../viewmodels/item_viewmodel.dart';
 import 'item_detail_view.dart';
 import 'login_view.dart';
 
-/// Vista de listado en MVVM convencional.
+/// Vista de listado con filtro de búsqueda en MVVM convencional.
 class ItemListView extends StatefulWidget {
   final AuthViewModel authViewModel;
   final ItemViewModel itemViewModel;
@@ -53,6 +53,16 @@ class _ItemListViewState extends State<ItemListView> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextField(
+              key: const Key('search_field'),
+              onChanged: widget.itemViewModel.filterItems,
+              decoration: const InputDecoration(
+                labelText: 'Buscar por título o categoría',
+              ),
+            ),
+          ),
           Expanded(
             child: ListenableBuilder(
               listenable: widget.itemViewModel,

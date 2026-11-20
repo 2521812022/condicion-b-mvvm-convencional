@@ -38,7 +38,7 @@ void main() {
     await tester.tap(find.byKey(const Key('login_button')));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('item_tile_1')), findsOneWidget);
+    expect(find.byKey(const Key('search_field')), findsOneWidget);
     expect(find.text('Elemento 1'), findsOneWidget);
   });
 }

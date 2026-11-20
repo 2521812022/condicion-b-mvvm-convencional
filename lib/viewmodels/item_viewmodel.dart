@@ -9,6 +9,7 @@ class ItemViewModel extends ChangeNotifier {
   final ApiService _apiService;
   final DatabaseHelper _dbHelper;
 
+  List<ItemDto> _allItems = [];
   List<ItemDto> items = [];
   ItemDto? selectedItem;
   bool isLoading = false;
@@ -24,12 +25,12 @@ class ItemViewModel extends ChangeNotifier {
     try {
       final response = await _apiService.dio.get<List<dynamic>>('/items');
       if (response.statusCode == 200 && response.data != null) {
-        items = response.data!
+        _allItems = response.data!
             .map((e) => ItemDto.fromMap(e as Map<String, dynamic>))
             .toList();
         final db = await _dbHelper.database;
         if (db != null) {
-          for (final item in items) {
+          for (final item in _allItems) {
             await db.insert(
               'items',
               item.toMap(),
@@ -37,17 +38,33 @@ class ItemViewModel extends ChangeNotifier {
             );
           }
         }
+        items = _allItems;
       }
     } catch (_) {
       final db = await _dbHelper.database;
       if (db != null) {
         final rows = await db.query('items');
-        items = rows.map(ItemDto.fromMap).toList();
+        _allItems = rows.map(ItemDto.fromMap).toList();
       }
+      items = _allItems;
     } finally {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  /// Lógica de filtrado acoplada directamente en el ViewModel.
+  void filterItems(String query) {
+    final normalized = query.trim().toLowerCase();
+    if (normalized.isEmpty) {
+      items = _allItems;
+    } else {
+      items = _allItems.where((item) {
+        return item.title.toLowerCase().contains(normalized) ||
+            item.category.toLowerCase().contains(normalized);
+      }).toList();
+    }
+    notifyListeners();
   }
 
   Future<void> loadDetail(String id) async {
